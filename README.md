@@ -7,12 +7,12 @@ sdk: streamlit
 app_file: app.py
 pinned: false
 license: mit
-short_description: IoT dashboard for energy forecasting and physical tamper detection.
 ---
 
 # Smart Grid Energy Analytics
+**Short Description:** IoT dashboard for energy forecasting and tamper detection.
 
-This project implements an end-to-end machine learning pipeline to analyze smart meter data. It features:
+This project implements an end-to-end machine learning pipeline to analyze smart meter data.
 * **Demand Forecasting:** Predicts grid load using XGBoost Regression.
 * **Theft Detection:** Identifies current bypass tampering using XGBoost Classification.
 * **Explainability:** Utilizes SHAP values to interpret model decisions.
