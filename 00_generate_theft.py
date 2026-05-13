@@ -1,4 +1,3 @@
-# 00_generate_theft.py
 import pandas as pd
 import numpy as np
 import os
@@ -63,13 +62,18 @@ for i in range(num_events):
 
 theft_indices = list(theft_indices)
 
-# Instead of a flat 0.20, we use a random distribution between 0.10 and 0.45
-# This simulates varying degrees of meter bypass/tampering
-noise_consumption = np.random.uniform(0.10, 0.45, size=len(theft_indices))
-noise_pf = np.random.uniform(0.10, 0.45, size=len(theft_indices))
+# CURRENT BYPASS THEFT SIGNATURE
+# The thief taps the line before the meter. The meter reads legally lower current, 
+# resulting in legally lower consumption. The row's internal math remains valid.
+# The model MUST use temporal lag features to detect the anomaly.
 
-df.loc[theft_indices, 'consumption_kwh'] *= noise_consumption
-df.loc[theft_indices, 'power_factor'] *= noise_pf
+# Thief bypasses 40% to 70% of the current (multiplier 0.30 to 0.60)
+noise_bypass = np.random.uniform(0.30, 0.60, size=len(theft_indices))
+
+df.loc[theft_indices, 'current'] *= noise_bypass
+df.loc[theft_indices, 'consumption_kwh'] *= noise_bypass
+df.loc[theft_indices, 'active_power'] *= noise_bypass
+
 df.loc[theft_indices, 'theft_flag'] = 1
 
 print(f"\nTheft Injection Summary")
