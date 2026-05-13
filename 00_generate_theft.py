@@ -52,16 +52,30 @@ df = df.sort_values('timestamp').reset_index(drop=True)
 
 df['theft_flag'] = 0
 
-# Randomly inject theft into 5% of rows.
-# A tampered meter under-reports consumption by ~80%.
 np.random.seed(42)
-theft_indices = np.random.choice(
-    df.index,
-    size=int(0.05 * len(df)),
-    replace=False
-)
+total_rows = len(df)
+target_theft_rows = int(0.05 * total_rows)
 
+# Create 4 distinct "theft events", each lasting several continuous days
+num_events = 4
+event_duration = target_theft_rows // num_events
+
+theft_indices = set()
+for _ in range(num_events):
+    start_idx = np.random.randint(0, total_rows - event_duration)
+    theft_indices.update(range(start_idx, start_idx + event_duration))
+
+theft_indices = list(theft_indices)
+
+# MULTIVARIATE THEFT SIGNATURE
+# 1. Drop billed consumption by 80%
 df.loc[theft_indices, 'consumption_kwh'] *= 0.20
+
+# 2. Drop power factor by 80% to simulate a phase tamper
+df.loc[theft_indices, 'power_factor'] *= 0.20
+
+# Voltage and Current remain untouched. The model will now learn that 
+# High Current + High Voltage + Crashing PF = Theft.
 df.loc[theft_indices, 'theft_flag'] = 1
 
 print(f"\nTheft Injection Summary")

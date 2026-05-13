@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.model_selection import StratifiedKFold, cross_val_score
+from sklearn.model_selection import TimeSeriesSplit, cross_val_score
 from sklearn.metrics import (classification_report, confusion_matrix,
                              roc_auc_score, roc_curve, precision_recall_curve,
                              average_precision_score)
@@ -63,14 +63,13 @@ print(f"AUC-ROC   : {roc_auc_score(y_test, y_prob):.4f}")
 print(f"Avg Prec. : {average_precision_score(y_test, y_prob):.4f}")
 
 # CV on training data only
-skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 cv_auc = cross_val_score(
     xgb.XGBClassifier(
         n_estimators=200, max_depth=5, learning_rate=0.05,
         scale_pos_weight=scale_pos_weight,
         random_state=42, tree_method='hist', n_jobs=-1
     ),
-    X_train, y_train, cv=skf, scoring='roc_auc', n_jobs=-1
+    X_train, y_train, cv=TimeSeriesSplit(n_splits=5), scoring='roc_auc', n_jobs=-1
 )
 print(f"\n5-Fold CV AUC-ROC: {cv_auc.mean():.4f} +/- {cv_auc.std():.4f}")
 
