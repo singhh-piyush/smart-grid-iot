@@ -15,4 +15,5 @@ jobs:
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://singhh-piyush:${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}@huggingface.co/spaces/singhh-piyush/smart-grid-iot main
+        run: |
+          git push --force https://singhh-piyush:$HF_TOKEN@huggingface.co/spaces/singhh-piyush/smart-grid-iot main
