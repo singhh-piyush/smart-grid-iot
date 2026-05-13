@@ -16,4 +16,6 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          # Allow the push even if old LFS objects from previous attempts are missing
+          git config lfs.allowincompletepush true
           git push --force https://singhh-piyush:$HF_TOKEN@huggingface.co/spaces/singhh-piyush/smart-grid-iot main
