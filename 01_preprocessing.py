@@ -31,9 +31,7 @@ imputer = KNNImputer(n_neighbors=5)
 df[numeric_cols] = imputer.fit_transform(df[numeric_cols])
 joblib.dump(imputer, 'models/knn_imputer.pkl')
 
-# FIX: only cap sensor columns, NOT consumption_kwh.
-# Consumption is both the regression target and the theft signal -
-# capping it would clip the 80% dip that theft rows rely on.
+
 SENSOR_COLS = ['voltage', 'current', 'power_factor']
 for col in SENSOR_COLS:
     Q1, Q3 = df[col].quantile(0.25), df[col].quantile(0.75)

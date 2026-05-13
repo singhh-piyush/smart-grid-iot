@@ -6,7 +6,6 @@ os.makedirs('data/processed', exist_ok=True)
 
 df = pd.read_csv('data/raw/iiot_smart_grid_dataset.csv')
 
-# Normalise column names to snake_case
 df.columns = (
     df.columns
     .str.strip()
@@ -43,12 +42,12 @@ df = df.sort_values('timestamp').reset_index(drop=True)
 
 df['theft_flag'] = 0
 
-# STRATIFIED BLOCK INJECTION
+# Inject synthetic theft events
 np.random.seed(42)
 total_rows = len(df)
 target_theft_rows = int(0.05 * total_rows)
 
-# Create ~30 distinct "theft events"
+# Create 30 distinct theft events
 num_events = 30
 event_duration = target_theft_rows // num_events
 
@@ -61,11 +60,6 @@ for i in range(num_events):
     theft_indices.update(range(start_idx, start_idx + event_duration))
 
 theft_indices = list(theft_indices)
-
-# CURRENT BYPASS THEFT SIGNATURE
-# The thief taps the line before the meter. The meter reads legally lower current, 
-# resulting in legally lower consumption. The row's internal math remains valid.
-# The model MUST use temporal lag features to detect the anomaly.
 
 # Thief bypasses 40% to 70% of the current (multiplier 0.30 to 0.60)
 noise_bypass = np.random.uniform(0.30, 0.60, size=len(theft_indices))
