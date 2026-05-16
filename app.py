@@ -1,6 +1,9 @@
 import streamlit as st
+from pathlib import Path
 import pandas as pd
 import numpy as np
+
+BASE = Path(__file__).parent
 import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
@@ -204,10 +207,12 @@ elif page == "Theft Detection":
     st.plotly_chart(fig, use_container_width=True)
 
     try:
-        st.image('outputs/figures/04_theft_classification_results.png',
+        st.image(BASE / 'outputs/figures/04_theft_classification_results.png',
                  caption='Performance Metrics: Confusion Matrix, ROC, Precision-Recall')
+        st.image(BASE / 'outputs/figures/05_theft_by_hour.png',
+                 caption='Temporal Risk: Average Theft Probability by Hour of Day')
     except FileNotFoundError:
-        st.warning("Classification results image not found. Run 03_theft_detection.py to generate it.")
+        st.warning("Detection results images not found. Run 03_theft_detection.py to generate them.")
 
 elif page == "SHAP Explainability":
     st.title("SHAP Model Explainability")
@@ -216,18 +221,18 @@ elif page == "SHAP Explainability":
     tab1, tab2 = st.tabs(["Theft Detection", "Demand Forecasting"])
     with tab1:
         try:
-            st.image('outputs/figures/06_shap_theft_beeswarm.png',
+            st.image(BASE / 'outputs/figures/06_shap_theft_beeswarm.png',
                      caption='Beeswarm: Individual feature impact across all test records')
-            st.image('outputs/figures/07_shap_theft_bar.png',
+            st.image(BASE / 'outputs/figures/07_shap_theft_bar.png',
                      caption='Mean |SHAP|: Average magnitude of feature importance')
-            st.image('outputs/figures/08_shap_theft_waterfall.png',
+            st.image(BASE / 'outputs/figures/08_shap_theft_waterfall.png',
                      caption='Waterfall: Local explanation for a single theft prediction')
         except FileNotFoundError:
             st.warning("SHAP images not found. Run 04_shap_analysis.py to generate them.")
             
     with tab2:
         try:
-            st.image('outputs/figures/09_shap_forecast_beeswarm.png',
+            st.image(BASE / 'outputs/figures/09_shap_forecast_beeswarm.png',
                      caption='Beeswarm: Feature impact on baseline consumption forecast')
         except FileNotFoundError:
             st.warning("SHAP images not found. Run 04_shap_analysis.py to generate them.")
