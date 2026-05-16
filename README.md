@@ -18,5 +18,5 @@ This project implements an end-to-end machine learning pipeline to analyze smart
 * **Explainability:** Utilizes SHAP values to interpret model decisions.
 
 ## Resources
-* **GitHub Repository:** [singhh-piyush/smart-grid-iot](https://github.com/singhh-piyush/smart-grid-iot)
+* **Hugging Face Space:** [singhh-piyush/smart-grid-iot](https://huggingface.co/spaces/singhh-piyush/smart-grid-iot)
 * **Dataset:** [IoT-Enabled Smart Grid Dataset (Kaggle)](https://www.kaggle.com/datasets/ziya07/iot-enabled-smart-grid-dataset)
