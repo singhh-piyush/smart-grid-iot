@@ -206,12 +206,15 @@ elif page == "Theft Detection":
                       yaxis_range=[0, 1], height=350, template='plotly_white')
     st.plotly_chart(fig, use_container_width=True)
 
-    try:
-        st.image(BASE / 'outputs/figures/04_theft_classification_results.png',
+    img_path_1 = BASE / 'outputs/figures/04_theft_classification_results.png'
+    img_path_2 = BASE / 'outputs/figures/05_theft_by_hour.png'
+    
+    if img_path_1.exists() and img_path_2.exists():
+        st.image(img_path_1,
                  caption='Performance Metrics: Confusion Matrix, ROC, Precision-Recall')
-        st.image(BASE / 'outputs/figures/05_theft_by_hour.png',
+        st.image(img_path_2,
                  caption='Temporal Risk: Average Theft Probability by Hour of Day')
-    except FileNotFoundError:
+    else:
         st.warning("Detection results images not found. Run 03_theft_detection.py to generate them.")
 
 elif page == "SHAP Explainability":
@@ -220,21 +223,26 @@ elif page == "SHAP Explainability":
 
     tab1, tab2 = st.tabs(["Theft Detection", "Demand Forecasting"])
     with tab1:
-        try:
-            st.image(BASE / 'outputs/figures/06_shap_theft_beeswarm.png',
+        img_shap_1 = BASE / 'outputs/figures/06_shap_theft_beeswarm.png'
+        img_shap_2 = BASE / 'outputs/figures/07_shap_theft_bar.png'
+        img_shap_3 = BASE / 'outputs/figures/08_shap_theft_waterfall.png'
+        
+        if img_shap_1.exists() and img_shap_2.exists() and img_shap_3.exists():
+            st.image(img_shap_1,
                      caption='Beeswarm: Individual feature impact across all test records')
-            st.image(BASE / 'outputs/figures/07_shap_theft_bar.png',
+            st.image(img_shap_2,
                      caption='Mean |SHAP|: Average magnitude of feature importance')
-            st.image(BASE / 'outputs/figures/08_shap_theft_waterfall.png',
+            st.image(img_shap_3,
                      caption='Waterfall: Local explanation for a single theft prediction')
-        except FileNotFoundError:
+        else:
             st.warning("SHAP images not found. Run 04_shap_analysis.py to generate them.")
             
     with tab2:
-        try:
-            st.image(BASE / 'outputs/figures/09_shap_forecast_beeswarm.png',
+        img_shap_4 = BASE / 'outputs/figures/09_shap_forecast_beeswarm.png'
+        if img_shap_4.exists():
+            st.image(img_shap_4,
                      caption='Beeswarm: Feature impact on baseline consumption forecast')
-        except FileNotFoundError:
+        else:
             st.warning("SHAP images not found. Run 04_shap_analysis.py to generate them.")
 
 elif page == "Live Simulation":
